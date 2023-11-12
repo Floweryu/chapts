@@ -1,5 +1,8 @@
 package com.chapts.wechat.controller;
 
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +34,16 @@ public class CallBackController {
             byte[] cipherBytes = messageDigest.digest(message.getBytes());
             String cipherStr = Hex.encodeHexString(cipherBytes);
             return signature.equals(cipherStr) ? echostr : "验证失败";
+        } catch (Exception e) {
+            return "error";
+        }
+    }
+
+    @PostMapping("/callback")
+    public String autoReply(HttpServletRequest request) {
+        try {
+            ServletInputStream inputStream = request.getInputStream();
+            return "ok";
         } catch (Exception e) {
             return "error";
         }
